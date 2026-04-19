@@ -1,49 +1,90 @@
-console.log("APP FILE LOADED");
+console.log("SERVER STARTING 🚀");
 
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
-app.use((req, res, next) => {
-    console.log("Incoming Request:", req.method, req.url);
-    next();
-});
-// Middleware FIRST
+
+// ✅ Middleware
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type"]
+}));// VERY IMPORTANT (fixes CORS error)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Connect MongoDB
+// ✅ MongoDB Connection
 mongoose.connect("mongodb://127.0.0.1:27017/blogDB")
 .then(() => console.log("MongoDB Connected ✅"))
 .catch(err => console.log(err));
 
-// Model
+// ✅ Model
 const Blog = require("./models/Blog");
 
-// Home route
+// ================= ROUTES ================= //
+
+// HOME
 app.get("/", (req, res) => {
-    res.send("Server + DB running 🚀");
+    res.send("Server running 🚀");
 });
 
-// Create blog route
-app.post("/create", async (req, res) => {
-    console.log("CREATE API HIT");
+// 🔹 GET ALL BLOGS
+app.get("/blogs", async (req, res) => {
     try {
-        const newBlog = new Blog({
+        const blogs = await Blog.find();
+        res.json(blogs);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// 🔹 CREATE BLOG
+app.post("/blogs", async (req, res) => {
+    try {
+        const blog = new Blog({
             title: req.body.title,
             content: req.body.content
         });
 
-        await newBlog.save();
-
-        res.send("Blog saved successfully ✅");
-    } catch (error) {
-        console.log(error);
-        res.send("Error saving blog ❌");
+        await blog.save();
+        res.json(blog);
+    } catch (err) {
+        res.status(500).send(err.message);
     }
 });
 
-// Start server
-app.listen(3000, () => {
-    console.log("Server started at http://localhost:3000");
+// 🔹 UPDATE BLOG
+app.put("/blogs/:id", async (req, res) => {
+    try {
+        const updatedBlog = await Blog.findByIdAndUpdate(
+            req.params.id,
+            {
+                title: req.body.title,
+                content: req.body.content
+            },
+            { new: true }
+        );
+
+        res.json(updatedBlog);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// 🔹 DELETE BLOG
+app.delete("/blogs/:id", async (req, res) => {
+    try {
+        await Blog.findByIdAndDelete(req.params.id);
+        res.json({ message: "Blog deleted ✅" });
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+// ================= SERVER ================= //
+
+app.listen(8000, () => {
+    console.log("Server running on http://localhost:8000");
 });

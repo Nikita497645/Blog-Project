@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog Admin Dashboard</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>📝 My Blog Dashboard</h1>
+    <p>Create, edit and manage your blogs</p>
+  </header>
+
+  <!-- FORM -->
+  <div class="form-container">
+    <input type="hidden" id="blogId">
+
+    <input type="text" id="title" placeholder="Enter blog title">
+
+    <textarea id="content" placeholder="Write your blog content..."></textarea>
+
+    <button onclick="submitBlog()">Publish Blog</button>
+  </div>
+
+  <!-- BLOG LIST -->
+  <div id="blogList" class="blog-grid"></div>
+
+  <script src="./js/script.js"></script>
+</body>
+</html>
