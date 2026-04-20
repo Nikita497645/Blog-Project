@@ -2,31 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Blog Admin Dashboard</title>
-  <link rel="stylesheet" href="./css/style.css">
+  <title>Blog Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-  <header>
-    <h1>📝 My Blog Dashboard</h1>
-    <p>Create, edit and manage your blogs</p>
-  </header>
+  <div class="container">
 
-  <!-- FORM -->
-  <div class="form-container">
-    <input type="hidden" id="blogId">
+    <h1>📝 Blog Dashboard</h1>
 
-    <input type="text" id="title" placeholder="Enter blog title">
+    <!-- FORM CARD -->
+    <div class="form-card">
+      <input type="hidden" id="blogId">
 
-    <textarea id="content" placeholder="Write your blog content..."></textarea>
+      <input type="text" id="title" placeholder="Enter blog title">
 
-    <button onclick="submitBlog()">Publish Blog</button>
+      <textarea id="content" placeholder="Write your blog..."></textarea>
+
+      <button id="submitBtn" onclick="submitBlog()">Publish Blog</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- BLOG LIST -->
+    <div id="blogList" class="blog-grid"></div>
+
   </div>
 
-  <!-- BLOG LIST -->
-  <div id="blogList" class="blog-grid"></div>
-
-  <script src="./js/script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>

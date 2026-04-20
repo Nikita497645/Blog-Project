@@ -1,34 +1,40 @@
-body {
-  font-family: Arial, sans-serif;
+* {
   margin: 0;
-  background: #f5f7fb;
-  color: #333;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* HEADER */
-header {
+body {
+  background: linear-gradient(to right, #eef2f3, #dfe9f3);
+}
+
+.container {
+  width: 90%;
+  max-width: 900px;
+  margin: 30px auto;
+}
+
+h1 {
   text-align: center;
-  padding: 20px;
-  background: #111;
-  color: white;
+  margin-bottom: 20px;
 }
 
-/* FORM */
-.form-container {
-  width: 60%;
-  margin: 20px auto;
+/* FORM CARD */
+.form-card {
   background: white;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
 }
 
 input, textarea {
   width: 100%;
   padding: 12px;
   margin: 10px 0;
-  border: 1px solid #ddd;
   border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 textarea {
@@ -37,34 +43,34 @@ textarea {
 }
 
 button {
-  padding: 10px 15px;
-  background: black;
-  color: white;
+  padding: 12px;
+  width: 100%;
   border: none;
   border-radius: 8px;
+  background: #4CAF50;
+  color: white;
+  font-size: 16px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 button:hover {
-  background: #333;
+  background: #45a049;
 }
 
 /* BLOG GRID */
 .blog-grid {
-  width: 80%;
-  margin: auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
-  padding: 20px;
+  grid-template-columns: 1fr;
+  gap: 20px;
 }
 
 /* BLOG CARD */
 .blog-card {
   background: white;
-  padding: 15px;
+  padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   transition: 0.3s;
 }
 
@@ -72,12 +78,27 @@ button:hover {
   transform: translateY(-5px);
 }
 
-/* BUTTONS */
-.edit-btn {
-  background: #007bff;
-  margin-right: 5px;
+.blog-card h3 {
+  margin-bottom: 10px;
 }
 
-.delete-btn {
-  background: #dc3545;
+.blog-card p {
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* BUTTONS */
+.blog-card button {
+  width: auto;
+  padding: 8px 12px;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.blog-card button:first-child {
+  background: orange;
+}
+
+.blog-card button:last-child {
+  background: red;
 }

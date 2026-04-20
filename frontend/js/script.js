@@ -1,15 +1,29 @@
 const API = "http://127.0.0.1:8000/blogs";
 
-// LOAD BLOGS
+// ================= AUTH CHECK =================
+function getToken() {
+  return localStorage.getItem("token");
+}
+
+// 🔒 Redirect if not logged in
+if (!getToken()) {
+  alert("Please login first 🔐");
+  window.location.href = "login.html";
+}
+
+// ================= LOAD BLOGS =================
 async function loadBlogs() {
   try {
     const res = await fetch(API);
-    console.log("Status:", res.status);
-
     const blogs = await res.json();
 
     const list = document.getElementById("blogList");
     list.innerHTML = "";
+
+    if (blogs.length === 0) {
+      list.innerHTML = "<p>No blogs yet 😢</p>";
+      return;
+    }
 
     blogs.forEach(blog => {
       list.innerHTML += `
@@ -34,9 +48,14 @@ async function loadBlogs() {
   }
 }
 
-// CREATE / UPDATE
+// ================= CREATE / UPDATE =================
 async function submitBlog() {
+  const btn = document.getElementById("submitBtn");
+
   try {
+    btn.innerText = "Publishing...";
+    btn.disabled = true;
+
     const id = document.getElementById("blogId").value;
     const title = document.getElementById("title").value;
     const content = document.getElementById("content").value;
@@ -44,18 +63,28 @@ async function submitBlog() {
     const data = { title, content };
 
     if (id) {
+      // UPDATE
       await fetch(`${API}/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": getToken()
+        },
         body: JSON.stringify(data)
       });
     } else {
+      // CREATE
       await fetch(API, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": getToken()
+        },
         body: JSON.stringify(data)
       });
     }
+
+    alert("Blog saved ✅");
 
     // Clear form
     document.getElementById("blogId").value = "";
@@ -67,21 +96,27 @@ async function submitBlog() {
   } catch (error) {
     console.error("SUBMIT ERROR:", error);
     alert("Error saving blog ❌");
+  } finally {
+    btn.innerText = "Publish Blog";
+    btn.disabled = false;
   }
 }
 
-// EDIT
+// ================= EDIT =================
 function editBlog(id, title, content) {
   document.getElementById("blogId").value = id;
   document.getElementById("title").value = title;
   document.getElementById("content").value = content;
 }
 
-// DELETE
+// ================= DELETE =================
 async function deleteBlog(id) {
   try {
     await fetch(`${API}/${id}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: {
+        "Authorization": getToken()
+      }
     });
 
     loadBlogs();
@@ -91,5 +126,12 @@ async function deleteBlog(id) {
   }
 }
 
-// INIT
+// ================= LOGOUT =================
+function logout() {
+  localStorage.removeItem("token");
+  alert("Logged out 👋");
+  window.location.href = "login.html";
+}
+
+// ================= INIT =================
 loadBlogs();
